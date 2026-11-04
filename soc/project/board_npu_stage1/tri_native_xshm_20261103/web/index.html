@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>三路视觉工作台</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="console">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon" aria-hidden="true">▦</span><div><h1>三路视觉工作台</h1><p>FPGA 采集 · SoC 智能识别</p></div></div>
+      <div class="top-actions"><span id="state-badge" class="state-badge" data-state="connecting"><span class="status-dot"></span><span id="state-label">正在连接</span></span><button id="fullscreen-button" class="quiet-button" type="button" aria-pressed="false">放大画面</button></div>
+    </header>
+    <main>
+      <section class="vision" aria-label="摄像头实时预览">
+        <div class="vision-header"><div><span class="live-indicator" id="live-indicator"></span><strong id="view-title">三路总览</strong></div><div><span id="preview-label">等待图像</span><span title="最近2秒不同源帧的显示服务完成计数，不代表物理屏幕刷新">新帧显示 <strong id="preview-fps-value">—</strong> FPS</span></div></div>
+        <div class="preview-stage" id="preview-stage">
+          <canvas id="preview-image" aria-label="摄像头画面及同帧 NPU 识别结果" hidden></canvas>
+          <div id="preview-placeholder" class="preview-placeholder"><span class="camera-symbol" aria-hidden="true">▣</span><h2 id="placeholder-title">准备开始采集</h2><p id="placeholder-message">连接成功后，点击右侧「开始识别」</p><span class="source-note">图像来自板载摄像头，不使用演示素材</span></div>
+          <div id="preview-warning" class="preview-warning" role="status" hidden></div>
+        </div>
+        <nav class="view-switch" aria-label="选择查看摄像头"><button class="view-button active" data-view="mosaic" type="button" aria-pressed="true">三路总览</button><button class="view-button" data-view="A0" type="button" aria-pressed="false">A0 放大</button><button class="view-button" data-view="A1" type="button" aria-pressed="false">A1 放大</button><button class="view-button" data-view="B0" type="button" aria-pressed="false">B0 放大</button></nav>
+      </section>
+      <aside class="control-panel" aria-label="运行状态与操作">
+        <div class="panel-heading"><h2>运行状态</h2><span id="connection-label">检查连接中</span></div>
+        <div class="metric-grid"><div class="metric main-metric"><span>识别输出</span><div><strong id="fps-value">—</strong><small>FPS</small></div></div><div class="metric"><span>已处理帧</span><strong id="frame-count">—</strong></div><div class="metric"><span>本帧目标</span><strong id="detection-count">—</strong></div><div class="metric"><span>运行时间</span><strong id="uptime-value">—</strong></div></div>
+        <div class="camera-status" aria-label="摄像头参与状态"><span data-camera="A0">A0</span><span data-camera="A1">A1</span><span data-camera="B0">B0</span><span class="disabled-camera">B1 停用</span></div>
+        <div class="primary-controls"><button id="start-button" class="start-button" type="button" disabled><span aria-hidden="true">▶</span> 开始识别</button><button id="stop-button" class="stop-button" type="button" disabled><span aria-hidden="true">■</span> 停止采集</button></div>
+        <p class="operation-note">开始后在板端完成采集、处理和识别。</p>
+        <button id="shutdown-button" class="shutdown-button" type="button" disabled>安全关机</button>
+      </aside>
+    </main>
+    <footer class="status-footer"><div class="status-message"><span id="message-icon" aria-hidden="true">●</span><div><p id="status-message" role="status" aria-live="polite">正在读取设备状态…</p><p id="error-message" class="error-message" role="alert" hidden></p></div></div><div class="footer-note"><span id="run-id">尚未启动</span><span id="preview-rate-note">预览请求 ≤ 8 Hz · 原始帧GPU提交，非物理刷新</span></div></footer>
+  </div>
+  <div id="shutdown-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="shutdown-title" hidden><section class="modal"><span class="modal-icon" aria-hidden="true">⏻</span><h2 id="shutdown-title">安全关闭开发板？</h2><p>系统将停止采集并保存必要状态，然后关机。<br>只有确认系统关机完成后，才可拔掉电源。</p><div class="modal-actions"><button id="cancel-shutdown" type="button">返回</button><button id="confirm-shutdown" class="confirm-shutdown" type="button">确认关机</button></div></section></div>
+</body>
+</html>

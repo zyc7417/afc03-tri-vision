@@ -1,0 +1,5 @@
+source,segment_value,slot,frame_id,raw_gray8_bytes,wire_bytes
+segment_0.json,2,0,95337,2073600,676258
+segment_0.json,2,1,95336,2073600,676112
+segment_1.json,1,0,93617,2073600,860503
+segment_1.json,1,1,93618,2073600,860383
